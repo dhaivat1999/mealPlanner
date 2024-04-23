@@ -1,6 +1,6 @@
 // Routes.js
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from "./components/Home";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -11,14 +11,28 @@ const AppRoutes = () => {
   return (
     <Router>
       <Header />
-      <Routes>
+      <Switch>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/calculate" element={<CalCalculator />} />
-      </Routes>
+      </Switch>
       <Footer />
     </Router>
   );
 };
 
 export default AppRoutes;
+
+
+// function App() {
+//     return (
+//         <Router>
+//             <Switch>
+//                 <Route path="/" exact component={Home} />
+//                 <Route path="/about" component={About} />
+//                 {/* Add more routes here */}
+//             </Switch>
+//         </Router>
+//     );
+// }
+
