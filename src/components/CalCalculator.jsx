@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 export default function CalCalculator() {
   const navigate = useNavigate();
   const [goal, setGoal] = useState("");
@@ -17,7 +16,9 @@ export default function CalCalculator() {
   const [bodyFat, setBodyFat] = useState("");
   const [calculatedCalories, setCalculatedCalories] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-
+  const [roundedMaintainCalories, setRoundedMaintainCalories] = useState(0);
+  const [roundedLoseCalories, setRoundedLoseCalories] = useState(0);
+  const [roundedGainCalories, setRoundedGainCalories] = useState(0);
 
   const isFormValid = () => {
     return (
@@ -135,18 +136,28 @@ export default function CalCalculator() {
       setShowPopup(true);
       console.log(dailyCalorieNeeds);
       console.log(calculatedBMR);
+      setRoundedMaintainCalories(Math.floor(dailyCalorieNeeds));
+      setRoundedLoseCalories(Math.floor(dailyCalorieNeeds - 500)); // Assuming a deficit of 500 calories for weight loss
+      setRoundedGainCalories(Math.floor(dailyCalorieNeeds + 300)); // Assuming a surplus of 300 calories for muscle gain
     }
   };
-  
+
   const handleGenRecipe = () => {
     navigate("/search");
-  }
+  };
+
+  const handleLoseWeight = () => {
+    navigate(`/search?calories=${roundedLoseCalories}`);
+  };
+  const handleMaintain = () => {
+    navigate(`/search?calories=${roundedMaintainCalories}`);
+  };
+  const handleGainMuscle = () => {
+    navigate(`/search?calories=${roundedMaintainCalories}`);
+  };
 
   const Popup = ({ onClose }) => {
     // Round down the calculated calories to remove decimal values
-    const roundedMaintainCalories = Math.floor(calculatedCalories);
-    const roundedLoseCalories = Math.floor(calculatedCalories - 500); // Assuming a deficit of 500 calories for weight loss
-    const roundedGainCalories = Math.floor(calculatedCalories + 300); // Assuming a surplus of 300 calories for muscle gain
 
     return (
       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-custom-900 bg-opacity-50">
@@ -168,7 +179,25 @@ export default function CalCalculator() {
               nutritionist or healthcare professional for personalized advice.
             </p>
           </div>
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex justify-between">
+            <button
+              onClick={handleLoseWeight}
+              className="bg-custom-500 hover:bg-custom-700 text-white font-bold py-2 px-4 rounded "
+            >
+              Recipes - Lose Weight
+            </button>
+            <button
+              onClick={handleMaintain}
+              className="bg-custom-500 hover:bg-custom-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Recipes - Maintain
+            </button>
+            <button
+              onClick={handleGainMuscle}
+              className="bg-custom-500 hover:bg-custom-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Recipes - Gain Muslce
+            </button>
             <button
               onClick={onClose}
               className="bg-custom-500 hover:bg-custom-700 text-white font-bold py-2 px-4 rounded"
@@ -190,8 +219,6 @@ export default function CalCalculator() {
               Nutrition Calculator
             </h2>
             <form className="mt-4">
-            
-
               <div className="mt-6">
                 <label className="block text-lg font-medium text-custom-400">
                   Preferred Units*:
@@ -471,14 +498,12 @@ export default function CalCalculator() {
                     </button>
                   )}
                   <button
-                      onClick={handleGenRecipe}
-                      className="bg-custom-500 text-white py-2 px-4 rounded-md hover:bg-custom-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
-                    >
-                      Generate Recipes
-                    </button>
+                    onClick={handleGenRecipe}
+                    className="bg-custom-500 text-white py-2 px-4 rounded-md hover:bg-custom-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+                  >
+                    Generate Recipes
+                  </button>
                 </div>
-
-                
               </div>
               {showPopup && <Popup onClose={() => setShowPopup(false)} />}
             </form>

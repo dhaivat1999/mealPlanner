@@ -8,7 +8,7 @@ const ShowMeals = () => {
   const selectedDiet = queryParams.get("diet");
   const [meals, setMeals] = useState([]);
   const [nutrients, setNutrients] = useState({});
-
+ setMeals(queryParams.get("calories"));
   useEffect(() => {
     const fetchMealDetails = async () => {
       try {

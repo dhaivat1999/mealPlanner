@@ -1,19 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Vegan from "../assets/Vegan.png";
 import Vegeterian from "../assets/Vegeterian.jpg";
 import Paleo from "../assets/Paleo.png";
 import Keto from "../assets/Keto.jpg";
 import Anything from "../assets/Anything.jpg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Search() {
-  const [showPopup, setShowPopup] = useState(false);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
   const navigate = useNavigate();
-  const [selectedDiet, setSelectedDiet] = useState("");
+  const [selectedDiet, setSelectedDiet] = useState("anything");
   const [calories, setCalories] = useState("");
-  // const [mealsPerDay, setMealsPerDay] = useState("");
-  const [meals, setMeals] = useState([]);
-  const [nutrients, setNutrients] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if(queryParams.get("calories")){
+      setCalories(queryParams.get("calories"));
+    } 
+  });
   const handleDietChange = (e) => {
     setSelectedDiet(e.target.value);
   };
@@ -22,99 +28,14 @@ export default function Search() {
     setCalories(e.target.value);
   };
 
-  const handleMealsPerDayChange = (e) => {
-    const value = parseInt(e.target.value);
-    if (value >= 1 && value <= 5) {
-      setMealsPerDay(value);
-    }
-  };
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  };
   const handleGenerateMeals = () => {
+    console.log(calories);
+    if (calories === null) {
+      setError("* Please Enter the Calories that you want to consume in a day");
+      return;
+    }
+    // setError("");
     navigate(`/showMeals?calories=${calories}&diet=${selectedDiet}`);
-  };
-  const MealPopup = ({ meals, onClose }) => {
-    return (
-      <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-custom-900 bg-opacity-50">
-        <div className="bg-custom-800 p-8 rounded-lg shadow-lg overflow-auto max-w-2xl">
-          <h2 className="text-lg font-bold text-custom-200 mb-4">
-            Generated Meals
-          </h2>
-          <div className="table-container">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="border-b border-gray-700 text-custom-200">
-                  <th className=" pb-2 border-r border-gray-700 pr-5 text-center ">
-                    Image
-                  </th>
-                  <th className="pb-2 border-r border-gray-700 pr-5 text-center ">
-                    Name
-                  </th>
-                  <th className=" pb-2 text-center">Details</th>
-                </tr>
-              </thead>
-              <tbody>
-                {meals.map((meal, index) => (
-                  <tr
-                    key={index}
-                    className="border-b border-gray-700 text-custom-200"
-                  >
-                    <td className="py-4 border-r border-gray-700 p-5">
-                      <img
-                        src={`https://spoonacular.com/recipeImages/${meal.id}-636x393.${meal.imageType}`}
-                        alt={meal.title}
-                        className="w-48 h-auto"
-                      />
-                    </td>
-                    <td className="py-4 text-center border-r border-gray-700">
-                      {meal.title}
-                    </td>
-                    <td className="py-4  text-center">
-                      <p className="mb-2 ">
-                        Ready in: {meal.readyInMinutes} minutes
-                      </p>
-                      <p className="mb-2  ">Servings: {meal.servings}</p>
-                      <a
-                        href={meal.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-300 block "
-                      >
-                        View Recipe
-                      </a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="mt-6 text-center">
-            <h3 className="text-lg font-bold text-custom-200 mb-2">
-              Nutrient Values
-            </h3>
-            <div className="text-custom-200">
-              <p>Calories: {nutrients.calories} KCal</p>
-              <p>Protein: {nutrients.protein} gms</p>
-              <p>Fat: {nutrients.fat} gms</p>
-              <p>Carbohydrates: {nutrients.carbohydrates}</p>
-            </div>
-          </div>
-          <p className="text-xs text-gray-300 mt-4">
-            *Disclaimer: These values are approximate and may vary. Consult a
-            nutritionist or healthcare professional for personalized advice.
-          </p>
-          <div className="mt-6 flex justify-center">
-            <button
-              onClick={onClose}
-              className="bg-custom-500 hover:bg-custom-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    );
   };
 
   const handleCalculateIdealCalories = () => {
@@ -137,7 +58,6 @@ export default function Search() {
           className="hidden"
         />
         <img src={image} alt={label} className="w-16 h-16 object-cover" />
-       
       </label>
     );
   }
@@ -146,6 +66,7 @@ export default function Search() {
       <div className="bg-custom-900 py-12 sm:py-24 h-screen">
         <div className="mx-auto max-w-2xl px-6">
           <h2 className="text-xl sm:text-3xl font-bold text-center text-custom-400">
+          
             Select your diet preference
           </h2>
           <p className="mt-2 text-sm sm:text-lg text-center text-custom-600">
@@ -197,7 +118,7 @@ export default function Search() {
           </div>
           <form className="mt-6">
             <label className="block text-sm sm:text-lg font-medium text-custom-400">
-              Total Calories:
+              Total Calories(*):
             </label>
             <input
               type="number"
@@ -221,13 +142,7 @@ export default function Search() {
               Calculate Ideal Calories
             </button>
           </div>
-          {showPopup && (
-            <MealPopup
-              meals={meals}
-              nutrients={nutrients}
-              onClose={handleClosePopup}
-            />
-          )}
+          {error && <p className="text-red-500 pt-5">{error}</p>}
         </div>
       </div>
     </>
