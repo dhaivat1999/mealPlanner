@@ -45,25 +45,21 @@ export default function Search() {
       })
       .then((data) => {
         setMeals(data.meals);
-        setNutrients(data.nutrients); // Assuming your API response has a 'meals' array
+        setNutrients(data.nutrients);
         setShowPopup(true);
         console.log("Generated meals:", data);
       })
       .catch((error) => {
-        // Handle errors here
         console.error("Error fetching data:", error);
       });
-
-    // console.log("Generate meals with the following inputs:");
-    // console.log("Selected Diet:", selectedDiet);
-    // console.log("Total Calories:", calories);
-    // console.log("Meals Per Day:", mealsPerDay);
   };
   const MealPopup = ({ meals, onClose }) => {
     return (
       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-custom-900 bg-opacity-50">
         <div className="bg-custom-800 p-8 rounded-lg shadow-lg overflow-auto max-w-2xl">
-          <h2 className="text-lg font-bold text-custom-200 mb-4">Generated Meals</h2>
+          <h2 className="text-lg font-bold text-custom-200 mb-4">
+            Generated Meals
+          </h2>
           <div className="table-container">
             <table className="w-full border-collapse">
               <thead>
@@ -79,7 +75,10 @@ export default function Search() {
               </thead>
               <tbody>
                 {meals.map((meal, index) => (
-                  <tr key={index} className="border-b border-gray-700 text-custom-200">
+                  <tr
+                    key={index}
+                    className="border-b border-gray-700 text-custom-200"
+                  >
                     <td className="py-4 border-r border-gray-700 p-5">
                       <img
                         src={`https://spoonacular.com/recipeImages/${meal.id}-636x393.${meal.imageType}`}
@@ -141,193 +140,113 @@ export default function Search() {
     navigate("/calculate");
   };
 
+  function DietOption({ label, value, image, selected, onChange }) {
+    return (
+      <label
+        className={`flex items-center ${
+          selected ? "bg-custom-600 text-white" : "bg-white text-black"
+        } rounded-lg p-2 cursor-pointer`}
+      >
+        <input
+          type="radio"
+          name="diet"
+          value={value}
+          checked={selected}
+          onChange={onChange}
+          className="hidden"
+        />
+        <img src={image} alt={label} className="w-16 h-16 object-cover" />
+        {/* <span className="ml-2">{label}</span> */}
+      </label>
+    );
+  }
   return (
     <>
-      <div className="bg-custom-900 py-24 sm:py-32 h-screen">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:mx-0">
-            <h2 className="text-3xl font-bold tracking-tight text-custom-400 sm:text-4xl">
-              Select the type of diet you wish to follow
-            </h2>
-            <p className="mt-2 text-lg leading-8 text-custom-600">
-              Ready to give it a shot? Let us know your diet.
-            </p>
-            <div className="mt-6">
-              <label className="block text-lg font-medium text-custom-400">
-                Diet Preferences:
-              </label>
-              <div className="flex mt-2 space-x-4">
-                <label
-                  className={`flex items-center ${
-                    selectedDiet === "anything"
-                      ? "bg-custom-600 text-white"
-                      : "bg-white text-black"
-                  } rounded-lg p-2 cursor-pointer`}
-                >
-                  <input
-                    type="radio"
-                    name="diet"
-                    value="anything"
-                    checked={selectedDiet === "anything"}
-                    onChange={handleDietChange}
-                    className="hidden"
-                  />
-                  <svg
-                    width="100"
-                    height="120" // Increased height to accommodate text below the image
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <image href={Anything} height="100" width="100" />
-                    <text x="10" y="110" fill="black" fontSize="16">
-                      Anything
-                    </text>{" "}
-                    {/* Adjusted y position */}
-                  </svg>
-                </label>
-
-                <label
-                  className={`flex items-center ${
-                    selectedDiet === "vegetarian"
-                      ? "bg-custom-600 text-white"
-                      : "bg-white text-black"
-                  } rounded-lg p-2 cursor-pointer`}
-                >
-                  <input
-                    type="radio"
-                    name="diet"
-                    value="vegetarian"
-                    checked={selectedDiet === "vegetarian"}
-                    onChange={handleDietChange}
-                    className="hidden"
-                  />
-                  <svg
-                    width="100"
-                    height="100"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <image href={Vegeterian} height="100" width="100" />
-                  </svg>
-                </label>
-
-                <label
-                  className={`flex items-center ${
-                    selectedDiet === "vegan"
-                      ? "bg-custom-600 text-white"
-                      : "bg-white text-black"
-                  } rounded-lg p-2 cursor-pointer`}
-                >
-                  <input
-                    type="radio"
-                    name="diet"
-                    value="vegan"
-                    checked={selectedDiet === "vegan"}
-                    onChange={handleDietChange}
-                    className="hidden"
-                  />
-                  <svg
-                    width="100"
-                    height="100"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <image href={Vegan} height="100" width="100" />
-                  </svg>
-                </label>
-                <label
-                  className={`flex items-center ${
-                    selectedDiet === "keto"
-                      ? "bg-custom-600 text-white"
-                      : "bg-white text-black"
-                  } rounded-lg p-2 cursor-pointer`}
-                >
-                  <input
-                    type="radio"
-                    name="diet"
-                    value="keto"
-                    checked={selectedDiet === "keto"}
-                    onChange={handleDietChange}
-                    className="hidden"
-                  />
-                  <svg
-                    width="100"
-                    height="100"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <image href={Keto} height="100" width="100" />
-                  </svg>
-                </label>
-                <label
-                  className={`flex items-center ${
-                    selectedDiet === "paleo"
-                      ? "bg-custom-600 text-white"
-                      : "bg-white text-black"
-                  } rounded-lg p-2 cursor-pointer`}
-                >
-                  <input
-                    type="radio"
-                    name="diet"
-                    value="paleo"
-                    checked={selectedDiet === "paleo"}
-                    onChange={handleDietChange}
-                    className="hidden"
-                  />
-                  <svg
-                    width="100"
-                    height="100"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <image href={Paleo} height="100" width="100" />
-                  </svg>
-                </label>
+      <div className="bg-custom-900 py-12 sm:py-24 h-screen">
+        <div className="mx-auto max-w-2xl px-6">
+          <h2 className="text-xl sm:text-3xl font-bold text-center text-custom-400">
+            Select your diet preference
+          </h2>
+          <p className="mt-2 text-sm sm:text-lg text-center text-custom-600">
+            Ready to give it a shot? Let us know your diet.
+          </p>
+          <div className="mt-6">
+            <label className="block text-sm sm:text-lg font-medium text-center text-custom-400">
+              Diet Preferences:
+            </label>
+            <div className="mt-6 overflow-x-auto flex justify-center">
+              <div className="flex space-x-4">
+                <DietOption
+                  label="Anything"
+                  value="anything"
+                  image={Anything}
+                  selected={selectedDiet === "anything"}
+                  onChange={handleDietChange}
+                />
+                <DietOption
+                  label="Vegetarian"
+                  value="vegetarian"
+                  image={Vegeterian}
+                  selected={selectedDiet === "vegetarian"}
+                  onChange={handleDietChange}
+                />
+                <DietOption
+                  label="Vegan"
+                  value="vegan"
+                  image={Vegan}
+                  selected={selectedDiet === "vegan"}
+                  onChange={handleDietChange}
+                />
+                <DietOption
+                  label="Keto"
+                  value="keto"
+                  image={Keto}
+                  selected={selectedDiet === "keto"}
+                  onChange={handleDietChange}
+                />
+                <DietOption
+                  label="Paleo"
+                  value="paleo"
+                  image={Paleo}
+                  selected={selectedDiet === "paleo"}
+                  onChange={handleDietChange}
+                />
               </div>
             </div>
-            <form className="mt-6">
-              <label className="block text-lg font-medium text-custom-400">
-                Total Calories:
-              </label>
-              <input
-                type="number"
-                name="calories"
-                value={calories}
-                onChange={handleCaloriesChange}
-                className="mt-1 block w-full py-2 px-3 border border-custom-500 bg-custom-800 text-custom-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-400 focus:border-transparent"
-              />
-              {/* <label className="block mt-4 text-lg font-medium text-custom-400">
-                Meals Per Day (Max 5):
-              </label>
-              <input
-                type="number"
-                name="mealsPerDay"
-                max="5"
-                min="1"
-                value={mealsPerDay}
-                onChange={handleMealsPerDayChange}
-                className="mt-1 block w-full py-2 px-3 border border-custom-500 bg-custom-800 text-custom-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-400 focus:border-transparent"
-              /> */}
-            </form>
-            <div className="mt-6">
-              <div className="pr-6 pb-5">
-                <button
-                  onClick={handleGenerateMeals}
-                  className="bg-custom-500 text-custom-100 py-2 px-4 rounded-md hover:bg-custom-700 focus:outline-none focus:ring-2 focus:ring-custom-700 focus:ring-opacity-50"
-                >
-                  Generate Meals
-                </button>
-              </div>
-              <button
-                onClick={handleCalculateIdealCalories}
-                className="bg-custom-500 text-white py-2 px-4 rounded-md hover:bg-custom-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
-              >
-                Don't Know Where to Start? Calculate Ideal Calories
-              </button>
-            </div>
-            {showPopup && (
-              <MealPopup
-                meals={meals}
-                nutrients={nutrients}
-                onClose={handleClosePopup}
-              />
-            )}
           </div>
+          <form className="mt-6">
+            <label className="block text-sm sm:text-lg font-medium text-custom-400">
+              Total Calories:
+            </label>
+            <input
+              type="number"
+              name="calories"
+              value={calories}
+              onChange={handleCaloriesChange}
+              className="mt-1 block w-full py-2 px-3 border border-custom-500 bg-custom-800 text-custom-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-custom-400 focus:border-transparent"
+            />
+          </form>
+          <div className="mt-6">
+            <button
+              onClick={handleGenerateMeals}
+              className="w-full bg-custom-500 text-custom-100 py-2 px-4 rounded-md hover:bg-custom-700 focus:outline-none focus:ring-2 focus:ring-custom-700 focus:ring-opacity-50"
+            >
+              Generate Meals
+            </button>
+            <button
+              onClick={handleCalculateIdealCalories}
+              className="mt-2 w-full bg-custom-500 text-white py-2 px-4 rounded-md hover:bg-custom-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50"
+            >
+              Calculate Ideal Calories
+            </button>
+          </div>
+          {showPopup && (
+            <MealPopup
+              meals={meals}
+              nutrients={nutrients}
+              onClose={handleClosePopup}
+            />
+          )}
         </div>
       </div>
     </>
