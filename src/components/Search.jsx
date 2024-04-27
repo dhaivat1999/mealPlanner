@@ -11,7 +11,7 @@ export default function Search() {
   const navigate = useNavigate();
   const [selectedDiet, setSelectedDiet] = useState("");
   const [calories, setCalories] = useState("");
-  const [mealsPerDay, setMealsPerDay] = useState("");
+  // const [mealsPerDay, setMealsPerDay] = useState("");
   const [meals, setMeals] = useState([]);
   const [nutrients, setNutrients] = useState("");
   const handleDietChange = (e) => {
@@ -32,26 +32,7 @@ export default function Search() {
     setShowPopup(false);
   };
   const handleGenerateMeals = () => {
-    const apiUrl = `https://api.spoonacular.com/mealplanner/generate?apiKey=dce8d3adc45d4f2c8cfdc3dd18325b55&timeFrame=1&targetCalories=${calories}&diet=${selectedDiet}`;
-
-    fetch(apiUrl, {
-      method: "GET",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setMeals(data.meals);
-        setNutrients(data.nutrients);
-        setShowPopup(true);
-        console.log("Generated meals:", data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    navigate(`/showMeals?calories=${calories}&diet=${selectedDiet}`);
   };
   const MealPopup = ({ meals, onClose }) => {
     return (
@@ -156,7 +137,7 @@ export default function Search() {
           className="hidden"
         />
         <img src={image} alt={label} className="w-16 h-16 object-cover" />
-        {/* <span className="ml-2">{label}</span> */}
+       
       </label>
     );
   }

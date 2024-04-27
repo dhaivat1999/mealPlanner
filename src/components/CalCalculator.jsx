@@ -190,69 +190,7 @@ export default function CalCalculator() {
               Nutrition Calculator
             </h2>
             <form className="mt-4">
-              {/* <div className="mt-6">
-                <label className="block text-lg font-medium text-custom-400">
-                  Goal*:
-                </label>
-                <div className="flex mt-2 space-x-4">
-                  <label
-                    className={`flex items-center  justify-center ${
-                      goal === "lose_weight"
-                        ? "bg-custom-500 text-white"
-                        : "bg-custom-200 text-gray-800"
-                    } rounded-lg p-2 cursor-pointer`}
-                    style={{ width: "150px" }}
-                  >
-                    <input
-                      type="radio"
-                      name="goal"
-                      value="lose_weight"
-                      checked={goal === "lose_weight"}
-                      onChange={() => handleGoalChange("lose_weight")}
-                      className="hidden"
-                    />
-                    Lose Weight
-                  </label>
-
-                  <label
-                    className={`flex items-center  justify-center ${
-                      goal === "maintain"
-                        ? "bg-custom-500 text-white"
-                        : "bg-custom-200 text-gray-800"
-                    } rounded-lg p-2 cursor-pointer`}
-                    style={{ width: "150px" }}
-                  >
-                    <input
-                      type="radio"
-                      name="goal"
-                      value="maintain"
-                      checked={goal === "maintain"}
-                      onChange={() => handleGoalChange("maintain")}
-                      className="hidden"
-                    />
-                    Maintain
-                  </label>
-
-                  <label
-                    className={`flex items-center justify-center ${
-                      goal === "build_muscle"
-                        ? "bg-custom-500 text-white"
-                        : "bg-custom-200 text-gray-800"
-                    } rounded-lg p-2 cursor-pointer`}
-                    style={{ width: "150px" }}
-                  >
-                    <input
-                      type="radio"
-                      name="goal"
-                      value="build_muscle"
-                      checked={goal === "build_muscle"}
-                      onChange={() => handleGoalChange("build_muscle")}
-                      className="hidden"
-                    />
-                    Build Muscle
-                  </label>
-                </div>
-              </div> */}
+            
 
               <div className="mt-6">
                 <label className="block text-lg font-medium text-custom-400">

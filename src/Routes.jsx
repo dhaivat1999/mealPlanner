@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Search from "./components/Search";
 import CalCalculator from "./components/CalCalculator";
+import ShowMeals from "./components/ShowMeals";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/calculate" element={<CalCalculator />} />
+        <Route path="/showMeals" element={<ShowMeals />} />
       </Routes>
       <Footer />
     </Router>
