@@ -8,7 +8,7 @@ const ShowMeals = () => {
   const selectedDiet = queryParams.get("diet");
   const [meals, setMeals] = useState([]);
   const [nutrients, setNutrients] = useState({});
- setMeals(queryParams.get("calories"));
+  // setMeals(queryParams.get("calories"));
   useEffect(() => {
     const fetchMealDetails = async () => {
       try {
@@ -19,7 +19,8 @@ const ShowMeals = () => {
         }
         const data = await response.json();
         setMeals(data.meals);
-        setNutrients(data.nutrients);
+        setNutrients(data.nutrients)
+        console.log(data,meals);
       } catch (error) {
         console.error("Error fetching meal details:", error);
       }
